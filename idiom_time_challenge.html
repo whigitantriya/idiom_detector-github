@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🕒 Idiom Blitz</title>
+  <script src="Dataset Idioms.js"></script> <!-- pastikan nama file sesuai -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #4c1d95, #1e3a8a);
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen flex flex-col items-center justify-center p-6">
+
+  <h1 class="text-4xl font-bold mb-4 text-yellow-300">🕒 Idiom Blitz</h1>
+
+  <div id="game" class="w-full max-w-xl bg-white text-black p-6 rounded-lg shadow-md text-center hidden">
+    <p class="text-xl font-bold mb-2">Idiom:</p>
+    <h2 id="question" class="text-2xl font-semibold mb-4 text-purple-700"></h2>
+
+    <div id="choices" class="space-y-3 mb-4"></div>
+
+    <p id="timer" class="text-lg text-red-500 mb-4">⏳ Time left: 10s</p>
+    <p id="scoreDisplay" class="text-lg text-green-600">Score: 0</p>
+  </div>
+
+  <button id="startBtn" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-6 rounded-lg mt-6">Start Game</button>
+
+  <div id="result" class="hidden mt-8 text-center">
+    <h2 class="text-3xl font-bold text-yellow-300 mb-4">🎉 Game Over!</h2>
+    <p class="text-lg text-white">Final Score: <span id="finalScore"></span></p>
+    <button onclick="startGame()" class="mt-10 bg-indigo-500 hover:bg-indigo-400 transition px-6 py-3 rounded-xl font-semibold shadow-lg">
+    🔁 Play Again
+    </button>
+
+    <div class="mt-6">
+      <a href="game.html" class="text-yellow-200 hover:underline text-lg">⬅ Back to Game Menu</a>
+    </div>
+  </div>
+
+  <!-- Script utama -->
+  <script>
+    let idiomKeys = [];
+    let questions = [];
+    let current = 0;
+    let score = 0;
+    let timeLeft = 10;
+    let timer;
+    const maxQuestions = 5;
+
+    document.getElementById("startBtn").addEventListener("click", startGame);
+
+    function getRandomChoices(correct, all, count = 3) {
+      const choices = [correct];
+      const others = all.filter(x => x !== correct);
+      while (choices.length < count && others.length > 0) {
+        const r = others[Math.floor(Math.random() * others.length)];
+        if (!choices.includes(r)) choices.push(r);
+      }
+      return choices.sort(() => 0.5 - Math.random());
+    }
+
+    function buildQuestions() {
+      idiomKeys = Object.keys(idioms);
+      idiomKeys = idiomKeys.sort(() => 0.5 - Math.random()).slice(0, maxQuestions); // hanya 5 soal
+      questions = idiomKeys.map(idiom => {
+        const correct = idioms[idiom].meaning;
+        const allMeanings = Object.values(idioms).map(entry => entry.meaning);
+        return {
+          idiom,
+          correct,
+          options: getRandomChoices(correct, allMeanings)
+        };
+      });
+    }
+
+    function startGame() {
+      score = 0;
+      current = 0;
+      buildQuestions();
+      document.getElementById("startBtn").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      document.getElementById("result").style.display = "none";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        endGame();
+        return;
+      }
+
+      const q = questions[current];
+      document.getElementById("question").innerText = q.idiom;
+      document.getElementById("choices").innerHTML = "";
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.className = "block w-full bg-indigo-500 hover:bg-indigo-400 text-white py-2 px-4 rounded-lg transition";
+        btn.onclick = () => selectAnswer(opt);
+        document.getElementById("choices").appendChild(btn);
+      });
+
+      timeLeft = 10;
+      document.getElementById("timer").innerText = `⏳ Time left: ${timeLeft}s`;
+      document.getElementById("scoreDisplay").innerText = `Score: ${score}`;
+      timer = setInterval(countdown, 1000);
+    }
+
+    function countdown() {
+      timeLeft--;
+      document.getElementById("timer").innerText = `⏳ Time left: ${timeLeft}s`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        current++;
+        showQuestion();
+      }
+    }
+
+    function selectAnswer(answer) {
+      clearInterval(timer);
+      if (answer === questions[current].correct) {
+        score++;
+      }
+      current++;
+      showQuestion();
+    }
+
+    function endGame() {
+      document.getElementById("game").style.display = "none";
+      document.getElementById("result").style.display = "block";
+      document.getElementById("finalScore").innerText = `${score} / ${questions.length}`;
+    }
+  </script>
+
+</body>
+</html>

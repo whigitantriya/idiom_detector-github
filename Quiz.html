@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧠 Idiom Quiz Game</title>
+  <script src="Dataset Idioms.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+  body {
+    background: linear-gradient(135deg, #1e3a8a, #1e293b);
+    min-height: 100vh;
+    font-family: 'Courier New', monospace;
+  }
+
+  .choice-bubble {
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    background-color: #ffffffcc; /* putih transparan */
+    color: #1f2937; /* teks gelap */
+  }
+
+  .choice-bubble:hover {
+    background-color: #fde68a; /* soft yellow hover */
+    transform: scale(1.03);
+  }
+
+  .choice-bubble.selected {
+    background-color: #34d399; /* green-400 */
+    color: #000;
+  }
+  </style>
+</head>
+<body class="text-white flex items-center justify-center text-center px-6 py-10">
+
+  <div class="w-full max-w-xl">
+    <h1 class="text-4xl font-extrabold text-yellow-300 mb-6 drop-shadow-lg">🧠 Quiz: Guess the Idiom Meaning</h1>
+
+    <div id="quizQuestion" class="mb-8 text-xl font-semibold text-white"></div>
+
+    <div id="quizChoices" class="flex flex-col gap-4 mb-6"></div>
+
+    <div id="quizFeedback" class="text-pink-300 font-semibold text-lg mb-6"></div>
+
+    <button onclick="loadQuiz()" class="bg-indigo-500 hover:bg-indigo-400 transition px-6 py-3 rounded-xl font-semibold shadow-lg">
+      🔁 Next Question
+    </button>
+
+    <div class="mt-6">
+      <a href="game.html" class="text-yellow-200 hover:underline text-lg">⬅ Back to Game Menu</a>
+    </div>
+  </div>
+
+  <script>
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function loadQuiz() {
+      const keys = Object.keys(idioms);
+      const randomIdiom = keys[Math.floor(Math.random() * keys.length)];
+      const correctMeaning = idioms[randomIdiom].meaning;
+
+      const otherKeys = keys.filter(k => k !== randomIdiom);
+      const incorrects = shuffle(otherKeys).slice(0, 3).map(k => idioms[k].meaning);
+
+      const options = shuffle([correctMeaning, ...incorrects]);
+
+      document.getElementById("quizQuestion").innerText = `What does "${randomIdiom}" mean❓`;
+
+      const choiceBox = document.getElementById("quizChoices");
+      choiceBox.innerHTML = "";
+      document.getElementById("quizFeedback").innerText = "";
+
+      options.forEach(option => {
+        const btn = document.createElement("div");
+        btn.innerText = option;
+        btn.className = "choice-bubble bg-white/10 px-6 py-3 rounded-full shadow hover:shadow-lg";
+        btn.onclick = () => {
+          document.querySelectorAll(".choice-bubble").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+
+          const feedback = option === correctMeaning
+            ? `✅ Correct!`
+            : `❌ Incorrect. The correct meaning is: "${correctMeaning}"`;
+
+          document.getElementById("quizFeedback").innerText = feedback;
+        };
+        choiceBox.appendChild(btn);
+      });
+    }
+
+    window.onload = loadQuiz;
+  </script>
+
+</body>
+</html>

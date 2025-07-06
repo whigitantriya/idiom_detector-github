@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎮 Idiom Games Menu</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #4c1d95, #1e3a8a);
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body class="text-white flex flex-col items-center justify-center px-4 py-12">
+
+  <div class="text-center">
+    <h1 class="text-5xl font-extrabold text-yellow-300 mb-4 drop-shadow-lg">🎮 Idiom Games</h1>
+    <p class="text-lg text-white/80 mb-8 italic">Ready to play? Choose your challenge!</p>
+  </div>
+
+  <div class="flex flex-col items-center space-y-6 w-full max-w-md">
+    <button onclick="location.href='Quiz.html'" class="w-full bg-green-500 hover:bg-green-400 transition transform hover:scale-105 px-6 py-4 rounded-xl text-xl font-semibold shadow-lg">
+      🧠 Quiz: Guess the Meaning
+    </button>
+    <button onclick="location.href='Fill the blank.html'" class="w-full bg-blue-500 hover:bg-blue-400 transition transform hover:scale-105 px-6 py-4 rounded-xl text-xl font-semibold shadow-lg">
+      ✍️ Fill in the Blank
+    </button>
+    <button onclick="location.href='match.html'" class="w-full bg-pink-500 hover:bg-pink-400 transition transform hover:scale-105 px-6 py-4 rounded-xl text-xl font-semibold shadow-lg">
+      🔗 Match Idiom to Meaning
+    </button>
+    <button onclick="location.href='idiom_time_challenge.html'" class="w-full bg-yellow-500 hover:bg-yellow-400 transition transform hover:scale-105 px-6 py-4 rounded-xl text-xl font-semibold shadow-lg">
+      🕒 Idiom Blitz
+    </button>
+  </div>
+
+  <div class="text-center mt-10">
+    <a href="index.html" class="text-yellow-200 hover:underline text-lg">⬅ Back to Home</a>
+  </div>
+
+</body>
+</html>

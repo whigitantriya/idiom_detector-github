@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>✍️ Fill in the Blank - Idiom Game</title>
+  <script src="Dataset Idioms.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #baf6fe, #384275);
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .quiz-box {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 2.5rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    .quiz-box h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #facc15; /* yellow-300 */
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-box #fillQuestion {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b; /* slate-800 */
+      margin-bottom: 1rem;
+    }
+
+    .quiz-box input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 9999px;
+      border: 2px solid #cbd5e1;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-box input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* blue ring */
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .btn:hover {
+      transform: scale(1.03);
+    }
+
+    #fillFeedback {
+      margin-top: 1rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #db2777; /* pink-600 */
+    }
+
+    a {
+      display: block;
+      margin-top: 2rem;
+      color: #2563eb;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-box">
+    <h1>✍️ Fill in the Blank</h1>
+
+    <div id="fillQuestion">Loading...</div>
+
+    <input id="fillInput" type="text" placeholder="Type the missing idiom here..." />
+
+    <div class="flex justify-center gap-4 mb-4">
+      <button onclick="checkFill()" class="btn bg-blue-500 text-white hover:bg-blue-400">Check</button>
+      <button onclick="loadFill()" class="btn bg-gray-600 text-white hover:bg-gray-500">Next</button>
+    </div>
+
+    <div id="fillFeedback"></div>
+
+    <a href="game.html">⬅ Back to Game Menu</a>
+  </div>
+
+  <script>
+    let currentIdiom = "";
+    let fullSentence = "";
+
+    function loadFill() {
+      const keys = Object.keys(idioms);
+      const selected = keys[Math.floor(Math.random() * keys.length)];
+      currentIdiom = selected.toLowerCase();
+      fullSentence = idioms[selected].example;
+
+      const blanked = fullSentence.replace(new RegExp(selected, "i"), "_____");
+
+      document.getElementById("fillQuestion").innerText = blanked;
+      document.getElementById("fillInput").value = "";
+      document.getElementById("fillFeedback").innerText = "";
+    }
+
+    function checkFill() {
+      const answer = document.getElementById("fillInput").value.toLowerCase().trim();
+      const feedback = document.getElementById("fillFeedback");
+
+      if (answer === currentIdiom) {
+        feedback.innerText = `✅ Correct! The full sentence was: "${fullSentence}"`;
+      } else {
+        feedback.innerText = `❌ Incorrect. Try again or click 'Next'.`;
+      }
+    }
+
+    window.onload = loadFill;
+  </script>
+
+</body>
+</html>

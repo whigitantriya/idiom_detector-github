@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Idiom - Idioms Detector</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-indigo-900 text-white font-mono">
+  <div class="min-h-screen flex flex-col items-center justify-center p-6">
+    <h1 class="text-4xl font-bold text-green-300 mb-6">🧠 Idiom Tester</h1>
+
+    <textarea id="inputText" class="w-full max-w-xl p-4 rounded-md text-black" rows="6" placeholder="Masukkan kalimat berbahasa Inggris..."></textarea>
+    <button onclick="detectIdiom()" class="mt-4 bg-pink-500 hover:bg-pink-400 px-6 py-2 rounded-full text-lg text-white shadow-lg">
+      Deteksi Idiom
+    </button>
+
+    <div id="result" class="mt-6 w-full max-w-xl bg-white/10 p-4 rounded-md text-lg"></div>
+
+    <a href="index.html" class="mt-10 text-yellow-300 hover:underline">⬅ Kembali ke Halaman Utama</a>
+  </div>
+
+  <!-- Load idioms dari file eksternal -->
+  <script src="Dataset Idioms.js"></script>
+
+  <!-- Script untuk deteksi idiom -->
+  <script>
+    function detectIdiom() {
+      const input = document.getElementById("inputText").value.toLowerCase();
+      const resultBox = document.getElementById("result");
+      resultBox.innerHTML = "";
+
+      const found = Object.entries(idioms).filter(([idiom, _]) => input.includes(idiom));
+      
+      if (found.length > 0) {
+        resultBox.innerHTML = `<p class="mb-4 text-green-300">✅ Ditemukan ${found.length} idiom:</p>`;
+        found.forEach(([idiom, data]) => {
+          resultBox.innerHTML += `
+            <div class="mb-4 p-3 bg-white/20 rounded-lg">
+              <h3 class="text-xl font-bold text-pink-300">🗣️ ${idiom}</h3>
+              <p><strong>Makna:</strong> ${data.meaning}</p>
+              <p><strong>Contoh:</strong> <em>${data.example}</em></p>
+            </div>
+          `;
+        });
+      } else {
+        resultBox.innerHTML = `<p class="text-yellow-300">❌ Tidak ada idiom yang terdeteksi.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
